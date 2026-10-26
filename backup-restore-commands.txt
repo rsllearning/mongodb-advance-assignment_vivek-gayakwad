@@ -1,0 +1,24 @@
+
+# Task 6: Backup and Restore
+
+# Step 1: Backup the database
+mongodump --db company_advanced `
+    --archive=company_advanced.archive `
+    --gzip
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Database backup failed."
+}
+
+# Step 2: Restore into a new database
+mongorestore `
+    --archive=company_advanced.archive `
+    --gzip `
+    --nsFrom="company_advanced.*" `
+    --nsTo="company_advanced_restore.*"
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Database restore failed."
+}
+
+Write-Host "Backup and restore completed successfully."
